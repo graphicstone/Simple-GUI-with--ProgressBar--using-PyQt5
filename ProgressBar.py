@@ -1,35 +1,63 @@
-import sys
+import sys,os
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QCheckBox
 from PyQt5.QtWidgets import (QWidget, QProgressBar, 
     QPushButton, QApplication)
 from PyQt5.QtCore import QBasicTimer
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QSize
 
+
+flag = False
+class Second(QMainWindow):
+    def __init__(self, parent=None):
+        super(Second, self).__init__(parent)
+        self.setMinimumSize(QSize(300, 150)) 
+        self.setWindowTitle("Select option")
+
+        self.b = QCheckBox("Android",self)
+        self.b.stateChanged.connect(self.clickBox)
+        self.b.setGeometry(20, 20, 320, 40)
+
+        self.b = QCheckBox("iOS",self)
+        self.b.stateChanged.connect(self.clickBox)
+        self.b.setGeometry(20, 50, 320, 40)
+
+        self.btn = QPushButton('Submit', self)
+        self.btn.clicked.connect(self.submitClickBox)
+        self.btn.setGeometry(200, 100, 50, 35)
+
+    def clickBox(self, state):
+
+        if state == QtCore.Qt.Checked:
+            print('Checked')
+        else:
+            print('Unchecked')
+
+    def submitClickBox(self, state):
+        self.close()
+        self.close()
+
 class MainWindow(QMainWindow):
-    flag = False
+    ct = 0
     def __init__(self):
         QMainWindow.__init__(self)
 
         self.setMinimumSize(QSize(1000, 500))    
-        self.setWindowTitle("Add address") 
+        self.setWindowTitle("Upload Files") 
 
         self.pLabel = QLabel(self)
         self.pLabel.setText('Project Address:')
-        self.pLine = QLineEdit(self)
-
-        self.pLine.move(300, 95)
-        self.pLine.resize(400, 35)
         self.pLabel.move(200, 95)
+        self.pLine = QLineEdit(self)
+        self.pLine.setGeometry(300, 95, 400, 35)
 
         self.uiLable = QLabel(self)
         self.uiLable.setText('UI Address:')
-        self.uiLine = QLineEdit(self)
-
-        self.uiLine.move(300, 180)
-        self.uiLine.resize(400, 35)
         self.uiLable.move(200, 180)
+        self.uiLine = QLineEdit(self)
+        self.uiLine.setGeometry(300, 180, 400, 35)
 
         self.pbar = QProgressBar(self)
         self.pbar.setGeometry(200, 300, 600, 35)
@@ -39,7 +67,8 @@ class MainWindow(QMainWindow):
         self.btn.setGeometry(600, 415, 150, 35)
 
         self.Nextbtn = QPushButton('Next', self)
-        self.Nextbtn.clicked.connect(self.clickMethod)
+        self.Nextbtn.clicked.connect(self.nextWindow)
+        self.dialog = Second(self)
         self.Nextbtn.setGeometry(800, 415, 150, 35)  
         self.Nextbtn.setEnabled(False)
 
@@ -62,6 +91,13 @@ class MainWindow(QMainWindow):
         print('Project Address: ' + self.pLine.text())
         print('UI Address: ' + self.uiLine.text())
 
+    def nextWindow(self):
+        self.ct = self.ct + 1
+        self.dialog.show()
+        self.Nextbtn.setText('Finish')
+        if(self.ct == 2):
+            self.close()
+
     def timerEvent(self, e):
       
         if self.step >= 100:
@@ -70,12 +106,11 @@ class MainWindow(QMainWindow):
             self.Nextbtn.setEnabled(True)
             return
 
-        if self.step == 60:
-            self.timer.stop()  
+        # if self.step == 60:
+        #     self.timer.stop()  
 
         self.step = self.step + 10
         self.pbar.setValue(self.step)
-    
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
