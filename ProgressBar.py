@@ -1,15 +1,11 @@
-import sys,os
+import sys, os
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QCheckBox
-from PyQt5.QtWidgets import (QWidget, QProgressBar, 
-    QPushButton, QApplication)
-from PyQt5.QtCore import QBasicTimer
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QCheckBox, QRadioButton, QGridLayout
+from PyQt5.QtGui import QImage, QPalette, QBrush
+from PyQt5.QtWidgets import (QWidget, QProgressBar, QPushButton, QApplication)
+from PyQt5.QtCore import QBasicTimer, QSize
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtCore import QSize
 
-
-flag = False
 class Second(QMainWindow):
     def __init__(self, parent=None):
         super(Second, self).__init__(parent)
@@ -29,7 +25,6 @@ class Second(QMainWindow):
         self.btn.setGeometry(200, 100, 50, 35)
 
     def clickBox(self, state):
-
         if state == QtCore.Qt.Checked:
             print('Checked')
         else:
@@ -37,15 +32,23 @@ class Second(QMainWindow):
 
     def submitClickBox(self, state):
         self.close()
-        self.close()
 
 class MainWindow(QMainWindow):
     ct = 0
     def __init__(self):
         QMainWindow.__init__(self)
+        centralWidget = QWidget(self)          
+        self.setCentralWidget(centralWidget)
 
         self.setMinimumSize(QSize(1000, 500))    
         self.setWindowTitle("Upload Files") 
+
+        oImage = QImage("ewe.png")
+        sImage = oImage.scaled(QSize(1000,500))
+        palette = QPalette()
+        palette.setBrush(10, QBrush(sImage))
+        self.setPalette(palette)
+        
 
         self.pLabel = QLabel(self)
         self.pLabel.setText('Project Address:')
