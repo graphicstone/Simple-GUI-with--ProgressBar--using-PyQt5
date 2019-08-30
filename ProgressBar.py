@@ -1,6 +1,6 @@
 import sys, os
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QCheckBox, QRadioButton, QGridLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QCheckBox, QRadioButton, QGridLayout, QHBoxLayout
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtWidgets import (QWidget, QProgressBar, QPushButton, QApplication)
 from PyQt5.QtCore import QBasicTimer, QSize
@@ -12,23 +12,34 @@ class Second(QMainWindow):
         self.setMinimumSize(QSize(300, 150)) 
         self.setWindowTitle("Select option")
 
-        self.b = QCheckBox("Android",self)
-        self.b.stateChanged.connect(self.clickBox)
-        self.b.setGeometry(20, 20, 320, 40)
+        layout = QHBoxLayout()
+        self.b1 = QRadioButton("Android")
+        self.b1.setChecked(True)
+        self.b1.toggled.connect(lambda:self.btnstate(self.b1))
+        layout.addWidget(self.b1)
+        self.b1.setGeometry(20, 20, 320, 40)
 
-        self.b = QCheckBox("iOS",self)
-        self.b.stateChanged.connect(self.clickBox)
-        self.b.setGeometry(20, 50, 320, 40)
+        layout = QHBoxLayout()
+        self.b2 = QRadioButton("Web")
+        self.b2.toggled.connect(lambda:self.btnstate(self.b2))
+        layout.addWidget(self.b2)
+        self.b2.setGeometry(20, 50, 320, 40)
 
         self.btn = QPushButton('Submit', self)
         self.btn.clicked.connect(self.submitClickBox)
         self.btn.setGeometry(200, 100, 50, 35)
 
-    def clickBox(self, state):
-        if state == QtCore.Qt.Checked:
-            print('Checked')
-        else:
-            print('Unchecked')
+    def btnstate(self,b):
+        if b.text() == "Android":
+            if b.isChecked() == True:
+                print ("Android checked")
+            else:
+                print ("Android not checked")
+        elif b.text() == "Web":
+            if b.isChecked() == True:
+                print ("Web Checked")
+            else:
+                print ("Web not checked")
 
     def submitClickBox(self, state):
         self.close()
@@ -43,7 +54,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QSize(1000, 500))    
         self.setWindowTitle("Upload Files") 
 
-        oImage = QImage("ewe.png")
+        oImage = QImage("bgn.png")
         sImage = oImage.scaled(QSize(1000,500))
         palette = QPalette()
         palette.setBrush(10, QBrush(sImage))
